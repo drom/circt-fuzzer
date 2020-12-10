@@ -9,6 +9,10 @@
   "scripts": {
     "test": "eslint lib test"
   },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/drom/circt-fuzzer.git"
