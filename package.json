@@ -1,0 +1,39 @@
+{
+  "name": "circt-fuzzer",
+  "version": "0.1.0",
+  "description": "Generator of random circuits",
+  "main": "lib/index.js",
+  "bin": {
+    "circt-fuzzer": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "eslint lib test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drom/circt-fuzzer.git"
+  },
+  "keywords": [],
+  "author": "Aliaksei Chapyzhenka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drom/circt-fuzzer/issues"
+  },
+  "homepage": "https://github.com/drom/circt-fuzzer#readme",
+  "devDependencies": {
+    "@drom/eslint-config": "^0.10.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.15.0",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "random-js": "^2.1.0"
+  },
+  "eslintConfig": {
+    "extends": "@drom/eslint-config/eslint4/node8",
+    "parserOptions": {
+      "ecmaVersion": 2020
+    }
+  }
+}
