@@ -24,6 +24,11 @@ yargs
     alias: 'I',
     default: 100
   })
+  .option('literals', {
+    type: 'boolean',
+    alias: 'L',
+    default: true
+  })
   .command({
     command: 'fir',
     aliases: ['firrtl'],
