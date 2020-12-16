@@ -24,6 +24,11 @@ yargs
     alias: 'I',
     default: 100
   })
+  .option('zero-width', {
+    type: 'boolean',
+    alias: 'z',
+    default: false
+  })
   .option('literals', {
     type: 'boolean',
     alias: 'L',
