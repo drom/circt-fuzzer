@@ -29,6 +29,11 @@ yargs
     alias: 'z',
     default: false
   })
+  .option('max-width', {
+    type: 'number',
+    alias: 'm',
+    default: 250
+  })
   .option('literals', {
     type: 'boolean',
     alias: 'L',
