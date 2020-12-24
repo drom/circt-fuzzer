@@ -39,6 +39,15 @@ yargs
     alias: 'L',
     default: true
   })
+  .option('output', {
+    type: 'string',
+    alias: 'o'
+  })
+  .option('node-count', {
+    type: 'boolean',
+    alias: 'n',
+    default: false
+  })
   .command({
     command: 'fir',
     aliases: ['firrtl'],
