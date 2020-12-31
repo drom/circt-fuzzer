@@ -2,7 +2,13 @@
 'use strict';
 
 const yargs = require('yargs');
-const lib = require('../lib/index.js');
+const genBody = require('../lib/fir-gen-body.js');
+const firOutput = require('../lib/fir-output.js');
+
+const handler = opt => {
+  const ast = genBody(opt);
+  firOutput(ast, opt);
+};
 
 yargs
   .option('verbose', {
@@ -52,7 +58,7 @@ yargs
     command: 'fir',
     aliases: ['firrtl'],
     desc: 'generate FIRRTL circuit',
-    handler: lib.genFIRRTL
+    handler
   })
   .demandCommand()
   .help().argv;
