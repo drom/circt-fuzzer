@@ -15,12 +15,16 @@ const VFILE2 = 'top_mod_m.v';
 const DUT = 'top_mod';
 
 console.log(`
-<script src="main.js"></script>
+<script src="tabler.js"></script>
 <style>
 table { width: 100%; border-collapse: collapse; }
 table, th, td { border: 1px solid black; }
-th, td { padding: 6px; }
-td { white-space: pre; }
+th, td { padding: 0 6; }
+.warning { background: #ff0; color: #000; }
+.error { background: #f00; color: #000; }
+.timeout { background: #222; color: #fff; }
+.unproven { background: #714200; color: #ff8c8c; }
+.fail { background: #870000; color: #fcabff; }
 </style>
 <table id="log">
 <tr>
