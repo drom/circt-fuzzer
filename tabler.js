@@ -72,6 +72,11 @@ const othr = root => {
     return;
   }
   root.addEventListener('click', () => console.log(unescape(txt)));
+  if (txt.match(/Stack dump:/)) {
+    root.innerHTML = 'Crash';
+    root.classList.add('timeout');
+    return;
+  }
   if (txt.match(/timeout/)) {
     root.innerHTML = 'T';
     root.classList.add('timeout');
