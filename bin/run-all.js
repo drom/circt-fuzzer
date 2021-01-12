@@ -59,9 +59,9 @@ const main = async () => {
 
     const opt = {
       seed,
-      O: 20,
-      I: 20,
-      z: false,
+      O: 50,
+      I: 10,
+      z: true,
       m: 20,
       L: true,
       o: 'top_mod.fir',
