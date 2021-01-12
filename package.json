@@ -7,7 +7,7 @@
     "circt-fuzzer": "bin/cli.js"
   },
   "scripts": {
-    "test": "eslint lib test",
+    "test": "eslint lib",
     "build": "browserify ./lib/app.js > ./test/app.js",
     "watch": "watchify ./lib/app.js -o ./test/app.js -v"
   },
