@@ -71,29 +71,28 @@ const othr = root => {
   if (txt === '') {
     return;
   }
+
   root.addEventListener('click', () => console.log(unescape(txt)));
-  if (txt.match(/Stack dump:/)) {
-    root.innerHTML = 'Crash';
-    root.classList.add('timeout');
+
+  if ([
+    {h: '$dff',   c: 'timeout', m: 'dff\\) to SAT database.'},
+    {h: 'Crash',  c: 'timeout', m: /Stack dump:/},
+    {h: 'Crash',  c: 'timeout', m: /Exception in thread "main"/},
+    {h: 'tOut',   c: 'timeout', m: /timeout/},
+    {h: 'syntax', c: 'error',   m: /ERROR: syntax error/},
+    {h: 'fail',   c: 'fail',    m: /proof did fail/},
+    {h: m => 'UNP ' + m[1], c: 'unproven', m: /ERROR: Found (\d+) unproven/}
+  ].some(e => {
+    const m = txt.match(e.m);
+    if (m) {
+      root.innerHTML = (typeof e.h === 'function') ? e.h(m) : e.h;
+      root.classList.add(e.c);
+      return true;
+    }
+  })) {
     return;
   }
-  if (txt.match(/timeout/)) {
-    root.innerHTML = 'T';
-    root.classList.add('timeout');
-    return;
-  }
-  const m1 = txt.match(/ERROR: Found (\d+) unproven/);
-  if (m1) {
-    root.innerHTML = m1[1];
-    root.classList.add('unproven');
-    return;
-  }
-  if (txt.match(/proof did fail/)) {
-    root.innerHTML = 'fail';
-    root.classList.add('fail');
-    return;
-  }
-  root.innerHTML = 'Click';
+  root.innerHTML = 'err';
   root.classList.add('error');
 };
 
