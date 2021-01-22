@@ -1,13 +1,24 @@
 #!/usr/bin/env node
 'use strict';
 
+const { writeFile } = require('fs');
+const { promisify } = require('util');
+
 const yargs = require('yargs');
+
 const genBody = require('../lib/fir-gen-body.js');
 const firOutput = require('../lib/fir-output.js');
 
-const handler = opt => {
+const writeFileP = promisify(writeFile);
+
+const handler = async opt => {
   const ast = genBody(opt);
-  firOutput(ast, opt);
+  const res = firOutput(ast, opt);
+  if (opt.o) {
+    await writeFileP(opt.o, res);
+  } else {
+    console.log(res);
+  }
 };
 
 yargs
