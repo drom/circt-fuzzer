@@ -5,15 +5,21 @@ const { writeFile } = require('fs');
 const { promisify } = require('util');
 
 const yargs = require('yargs');
+const rnd = require('random-js');
 
-const genBody = require('../lib/fir-gen-body.js');
+const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
 
 const writeFileP = promisify(writeFile);
 
 const handler = async opt => {
-  const ast = genBody(opt);
-  const res = firOutput(ast, opt);
+
+  opt.seed = opt.seed || ((1000000 * Math.random()) |0);
+  const mt = rnd.MersenneTwister19937.seed(opt.seed);
+
+  const circuit = genCircuit(mt, opt);
+  const res = firOutput(circuit, opt);
+
   if (opt.o) {
     await writeFileP(opt.o, res);
   } else {

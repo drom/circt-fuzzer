@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
-const { writeFile } = require('fs');
+const { writeFile, unlink } = require('fs');
 const { promisify } = require('util');
 const { exec } = require('child_process');
+const rnd = require('random-js');
 
-const genBody = require('../lib/fir-gen-body.js');
-// const genFIRRTL = require('../lib/gen-firrtl.js');
+const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
 
 const execP = promisify(exec);
@@ -40,15 +40,18 @@ const main = async () => {
     const opt = {
       seed,
       O: 5000,
-      I: 100,
+      I: 50,
       z: true,
-      m: 2000,
+      m: 20,
       L: true,
       o: DUT + seed + '.fir',
       n: false
     };
-    const ast = genBody(opt);
-    const res = firOutput(ast, opt);
+    const mt = rnd.MersenneTwister19937.seed(opt.seed);
+
+    const circuit = genCircuit(mt, opt);
+    const res = firOutput(circuit, opt);
+
     if (opt.o) {
       await writeFileP(opt.o, res);
     } else {
@@ -57,11 +60,11 @@ const main = async () => {
 
     try {
       const { stdout, stderr } = await execP(`../../llvm/circt/build/bin/firtool \
-          ${DUT + seed}.fir \
-          --lower-to-rtl \
-          --verilog -o=${VFILE2}
+        ${DUT + seed}.fir \
+        --lower-to-rtl \
+        --verilog -o=${VFILE2}
       `);
-      fs.unlink(DUT + seed + '.fir', err => { if (err) { console.error(err); } });
+      unlink(DUT + seed + '.fir', err => { if (err) { console.error(err); } });
       if (stderr.trim() !== '') {
         console.log('<tr>');
         console.log('<td>', seed);

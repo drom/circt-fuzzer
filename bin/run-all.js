@@ -5,8 +5,9 @@ const { writeFile } = require('fs');
 const { promisify } = require('util');
 const { exec, spawn } = require('child_process');
 
-const genBody = require('../lib/fir-gen-body.js');
-// const genFIRRTL = require('../lib/gen-firrtl.js');
+const rnd = require('random-js');
+
+const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
 
 const execP = promisify(exec);
@@ -70,8 +71,12 @@ const main = async () => {
       o: 'top_mod.fir',
       n: true
     };
-    const ast = genBody(opt);
-    const res = firOutput(ast, opt);
+
+    const mt = rnd.MersenneTwister19937.seed(opt.seed);
+
+    const circuit = genCircuit(mt, opt);
+    const res = firOutput(circuit, opt);
+
     if (opt.o) {
       await writeFileP(opt.o, res);
     } else {
@@ -92,7 +97,7 @@ const main = async () => {
     }
 
     try {
-      const { stdout, stderr } = await execP(`verilator --lint-only ${VFILE1}`);
+      const { stdout, stderr } = await execP(`verilator --top-module top_mod --lint-only ${VFILE1}`);
       console.log('<td>', (stdout || ''), (stderr || ''), '</td>');
     } catch(err) {
       console.log('<td>', (err.stdout || ''), (err.stderr || ''), '</td>');
@@ -110,7 +115,7 @@ const main = async () => {
     }
 
     try {
-      const { stdout, stderr } = await execP(`verilator --lint-only ${VFILE2}`);
+      const { stdout, stderr } = await execP(`verilator --top-module top_mod --lint-only ${VFILE2}`);
       console.log('<td>', (stdout || ''), (stderr || ''), '</td>');
     } catch(err) {
       console.log('<td>', (err.stdout || ''), (err.stderr || ''), '</td>');
@@ -123,13 +128,13 @@ const main = async () => {
     // try {
     //   const yosys = await spawn(
     //     '../../YosysHQ/yosys/yosys', [
-    //       `-q`, `-p`, `read_verilog ${VFILE1}
+    //       `-q`, `-p`, `read_verilog -sv ${VFILE1}
     //       rename ${DUT} top1
     //       proc
     //       memory
     //       flatten top1
     //       hierarchy -top top1
-    //       read_verilog ${VFILE2}
+    //       read_verilog -sv ${VFILE2}
     //       rename ${DUT} top2
     //       proc
     //       memory
@@ -176,13 +181,13 @@ const main = async () => {
     try {
       const yosys = await spawn(
         '../../YosysHQ/yosys/yosys', [
-          `-q`, `-p`, `read_verilog ${VFILE1}
+          `-q`, `-p`, `read_verilog -sv ${VFILE1}
           rename ${DUT} top1
           proc
           memory
           flatten top1
           hierarchy -top top1
-          read_verilog ${VFILE2}
+          read_verilog -sv ${VFILE2}
           rename ${DUT} top2
           proc
           memory
@@ -230,13 +235,13 @@ const main = async () => {
     // try {
     //   const yosys = await spawn(
     //     '../../YosysHQ/yosys/yosys', [
-    //       `-q`, `-p`, `read_verilog ${VFILE1}
+    //       `-q`, `-p`, `read_verilog -sv ${VFILE1}
     //       rename ${DUT} top1
     //       proc
     //       memory
     //       flatten top1
     //       hierarchy -top top1
-    //       read_verilog ${VFILE2}
+    //       read_verilog -sv ${VFILE2}
     //       rename ${DUT} top2
     //       proc
     //       memory
@@ -279,13 +284,13 @@ const main = async () => {
     // try {
     //   const yosys = await spawn(
     //     '../../YosysHQ/yosys/yosys', [
-    //       `-q`, `-p`, `read_verilog ${VFILE1}
+    //       `-q`, `-p`, `read_verilog -sv ${VFILE1}
     //       rename ${DUT} top1
     //       proc
     //       memory
     //       flatten top1
     //       hierarchy -top top1
-    //       read_verilog ${VFILE2}
+    //       read_verilog -sv ${VFILE2}
     //       rename ${DUT} top2
     //       proc
     //       memory
