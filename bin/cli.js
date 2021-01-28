@@ -71,6 +71,10 @@ yargs
     alias: 'n',
     default: false
   })
+  .option('bundles', {
+    type: 'boolean',
+    default: false
+  })
   .command({
     command: 'fir',
     aliases: ['firrtl'],

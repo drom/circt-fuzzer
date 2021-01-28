@@ -65,6 +65,7 @@ const main = async () => {
       seed,
       O: 50,
       I: 10,
+      bundles: true,
       z: true,
       m: 20,
       L: true,
@@ -107,6 +108,7 @@ const main = async () => {
       const { stdout, stderr } = await execP(`../../llvm/circt/build/bin/firtool \
           top_mod.fir \
           --lower-to-rtl \
+          --enable-lower-types \
           --verilog -o=${VFILE2}
       `);
       console.log('<td>', (stdout || ''), (stderr || ''), '</td>');
