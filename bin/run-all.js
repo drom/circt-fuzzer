@@ -66,6 +66,7 @@ const main = async () => {
       O: 50,
       I: 10,
       bundles: true,
+      instances: true,
       z: true,
       m: 20,
       L: true,

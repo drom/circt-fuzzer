@@ -75,6 +75,10 @@ yargs
     type: 'boolean',
     default: false
   })
+  .options('instances', {
+    type: 'boolean',
+    default: false
+  })
   .command({
     command: 'fir',
     aliases: ['firrtl'],
