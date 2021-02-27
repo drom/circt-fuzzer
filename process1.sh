@@ -1,13 +1,14 @@
 #!/bin/bash
 
-VFILE1=a_top_mod_old.v
-VFILE2=a_top_mod_new.v
+VFILE1=a_top_mod_old.sv
+VFILE2=a_top_mod_new.sv
 DUT=top_mod
 
 echo "firrtl"
 ./firrtl-1.5-SNAPSHOT \
   --dont-fold div \
   -i a_top_mod.fir \
+  -X sverilog \
   -o $VFILE1
 
 echo "firrtl lint"
@@ -46,7 +47,7 @@ echo "yosys 0"
   hierarchy -top equiv
   clean -purge
   equiv_simple -short
-  equiv_induct
+  equiv_induct -seq 20
   equiv_status -assert
 "
 
@@ -67,7 +68,7 @@ echo "yosys 1"
   hierarchy -top equiv
   clean -purge
   equiv_simple -short -undef
-  equiv_induct
+  equiv_induct -seq 20
   equiv_status -assert
 "
 
@@ -88,7 +89,7 @@ echo "yosys 2"
   hierarchy -top equiv
   clean -purge
   equiv_simple -short
-  equiv_induct -undef
+  equiv_induct -undef -seq 20
   equiv_status -assert
 "
 

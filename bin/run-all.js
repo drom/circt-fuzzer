@@ -13,10 +13,11 @@ const firOutput = require('../lib/fir-output.js');
 const execP = promisify(exec);
 const writeFileP = promisify(writeFile);
 
-const VFILE1 = 'top_mod.v';
-const VFILE2 = 'top_mod_m.v';
+const VFILE1 = 'top_mod.sv';
+const VFILE2 = 'top_mod_m.sv';
 const DUT = 'top_mod';
 const SFC = './firrtl-1.5-SNAPSHOT'; // './firrtl-1.4.0';
+const NFC = '../../llvm/circt/build/bin/firtool';
 
 console.log(`
 <script src="tabler.js"></script>
@@ -91,7 +92,9 @@ const main = async () => {
       const { stdout, stderr } = await execP([
         SFC,
         '--dont-fold div',
-        '-i top_mod.fir'
+        '-i top_mod.fir',
+        '-X sverilog',
+        '-o ' + VFILE1
       ].join(' '));
       console.log('<td>', (stdout || ''), (stderr || ''), '</td>');
     } catch(err) {
@@ -106,12 +109,14 @@ const main = async () => {
     }
 
     try {
-      const { stdout, stderr } = await execP(`../../llvm/circt/build/bin/firtool \
-          top_mod.fir \
-          --lower-to-rtl \
-          --enable-lower-types \
-          --verilog -o=${VFILE2}
-      `);
+      const { stdout, stderr } = await execP([
+        NFC,
+        'top_mod.fir',
+        '--lower-to-rtl',
+        '--enable-lower-types',
+        '--verilog',
+        '-o=' + VFILE2
+      ].join(' '));
       console.log('<td>', (stdout || ''), (stderr || ''), '</td>');
     } catch(err) {
       console.log('<td>', (err.stdout || ''), (err.stderr || ''), '</td>');
@@ -199,7 +204,7 @@ const main = async () => {
           hierarchy -top equiv
           clean -purge
           equiv_simple -short -undef
-          equiv_induct
+          equiv_induct -seq 50
           equiv_status -assert
         `]
       );
