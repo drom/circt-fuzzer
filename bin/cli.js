@@ -50,7 +50,7 @@ yargs
   .option('zero-width', {
     type: 'boolean',
     alias: 'z',
-    default: false
+    default: true
   })
   .option('max-width', {
     type: 'number',
@@ -73,11 +73,15 @@ yargs
   })
   .option('bundles', {
     type: 'boolean',
-    default: false
+    default: true
   })
   .options('instances', {
     type: 'boolean',
-    default: false
+    default: true
+  })
+  .options('mems', {
+    type: 'boolean',
+    default: true
   })
   .command({
     command: 'fir',

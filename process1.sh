@@ -17,6 +17,7 @@ verilator \
   --lint-only \
   $VFILE1
 
+# valgrind -q
 echo "firtool"
 ../../llvm/circt/build/bin/firtool \
   a_top_mod.fir \
