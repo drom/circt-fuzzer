@@ -76,12 +76,14 @@ const othr = root => {
 
   if ([
     {h: '$dff',   c: 'timeout', m: 'dff\\) to SAT database.'},
-    {h: 'Crash',  c: 'timeout', m: /Stack dump:/},
+    {h: 'Dump',  c: 'timeout', m: /Stack dump:/},
     {h: 'Crash',  c: 'timeout', m: /Exception in thread "main"/},
     {h: 'tOut',   c: 'timeout', m: /timeout/},
     {h: 'syntax', c: 'error',   m: /ERROR: syntax error/},
     {h: 'fail',   c: 'fail',    m: /proof did fail/},
-    {h: m => 'UNP ' + m[1], c: 'unproven', m: /ERROR: Found (\d+) unproven/}
+    {h: m => 'UNP ' + m[1], c: 'unproven', m: /ERROR: Found (\d+) unproven/},
+    {h: () => 'err', c: 'error', m: /ERROR: /},
+    {h: () => 'warn', c: 'warning', m: /Warning: /}
   ].some(e => {
     const m = txt.match(e.m);
     if (m) {
