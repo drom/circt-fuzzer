@@ -71,6 +71,14 @@ yargs
     alias: 'n',
     default: false
   })
+  .options('verif', {
+    type: 'boolean',
+    default: true
+  })
+  .options('fsms', {
+    type: 'boolean',
+    default: true
+  })
   .option('bundles', {
     type: 'boolean',
     default: true
