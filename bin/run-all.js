@@ -38,7 +38,7 @@ th, td { padding: 0 6; }
 <th>lint</th>
 <th>mlir</th>
 <th>lint</th>
-<!-- <th>yosys</th> -->
+<th>yosys</th>
 <th>undef</th>
 <!-- <th>sat</th> -->
 <!-- <th>max</th> -->
@@ -133,59 +133,6 @@ const main = async () => {
 
 
 
-    // console.log('<td>');
-    // // const t0 = Date.now();
-    // try {
-    //   const yosys = await spawn(
-    //     '../../YosysHQ/yosys/yosys', [
-    //       `-q`, `-p`, `read_verilog -sv ${VFILE1}
-    //       rename ${DUT} top1
-    //       proc
-    //       memory
-    //       flatten top1
-    //       hierarchy -top top1
-    //       read_verilog -sv ${VFILE2}
-    //       rename ${DUT} top2
-    //       proc
-    //       memory
-    //       flatten top2
-    //       equiv_make top1 top2 equiv
-    //       hierarchy -top equiv
-    //       clean -purge
-    //       equiv_simple -short
-    //       equiv_induct
-    //       equiv_status -assert
-    //     `]
-    //   );
-    //
-    //   // equiv_simple -short -undef
-    //   // equiv_induct -undef
-    //   // equiv_status -assert
-    //
-    //   const tot = setTimeout(() => {
-    //     console.log('timeout ' + seed);
-    //     yosys.kill(9);
-    //   }, 10000);
-    //   for await (const err of yosys.stderr) {
-    //     console.log(err.toString());
-    //   }
-    //   for await (const out of yosys.stdout) {
-    //     console.log(out.toString());
-    //   }
-    //   yosys.on('error', err => {
-    //     // console.log('T = ' + ((Date.now() - t0) / 1000));
-    //     console.log(err);
-    //     clearTimeout(tot);
-    //   });
-    //   yosys.on('exit', () => {
-    //     // console.log('T = ' + ((Date.now() - t0) / 1000));
-    //     clearTimeout(tot);
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-
-
     console.log('<td>');
     // const t0 = Date.now();
     try {
@@ -205,8 +152,63 @@ const main = async () => {
           equiv_make top1 top2 equiv
           hierarchy -top equiv
           clean -purge
-          equiv_simple -short -undef
+          equiv_simple -undef -short
           equiv_induct -seq 50
+          equiv_status -assert
+        `]
+      );
+
+      // equiv_simple -short -undef
+      // equiv_induct -undef
+      // equiv_status -assert
+
+      const tot = setTimeout(() => {
+        console.log('timeout ' + seed);
+        yosys.kill(9);
+      }, 10000);
+      for await (const err of yosys.stderr) {
+        console.log(err.toString());
+      }
+      for await (const out of yosys.stdout) {
+        console.log(out.toString());
+      }
+      yosys.on('error', err => {
+        // console.log('T = ' + ((Date.now() - t0) / 1000));
+        console.log(err);
+        clearTimeout(tot);
+      });
+      yosys.on('exit', () => {
+        // console.log('T = ' + ((Date.now() - t0) / 1000));
+        clearTimeout(tot);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+
+    console.log('<td>');
+    // const t0 = Date.now();
+    try {
+      const yosys = await spawn(
+        '../../YosysHQ/yosys/yosys', [
+          `-q`, `-p`, `read_verilog -sv ${VFILE1}
+          rename ${DUT} top1
+          proc
+          memory
+          flatten top1
+          hierarchy -top top1
+          async2sync
+          read_verilog -sv ${VFILE2}
+          rename ${DUT} top2
+          proc
+          memory
+          flatten top2
+          equiv_make top1 top2 equiv
+          hierarchy -top equiv
+          async2sync
+          clean -purge
+          equiv_simple -undef -short
+          equiv_induct -undef -seq 50
           equiv_status -assert
         `]
       );
