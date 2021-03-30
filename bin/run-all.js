@@ -46,7 +46,7 @@ th, td { padding: 0 6; }
 );
 
 const main = async () => {
-  for (let seed = 1; seed < 30000; seed++) {
+  for (let seed = 1; seed < 10000; seed++) {
 
     console.log('<tr>');
 
