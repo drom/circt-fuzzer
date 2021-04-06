@@ -91,6 +91,10 @@ yargs
     type: 'boolean',
     default: true
   })
+  .options('ordered', {
+    type: 'boolean',
+    default: false
+  })
   .command({
     command: 'fir',
     aliases: ['firrtl'],
