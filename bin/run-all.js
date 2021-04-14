@@ -116,8 +116,8 @@ const main = async () => {
         NFC,
         'top_mod.fir',
         '--lower-to-rtl',
-        '--enable-lower-types',
-        '--circt-lowering-options=noAlwaysFF',
+        '--lower-types',
+        '--lowering-options=noAlwaysFF',
         '--verilog',
         '-o=' + VFILE2
       ].join(' '));
