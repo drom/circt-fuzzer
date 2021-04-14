@@ -140,14 +140,14 @@ const main = async () => {
     try {
       const yosys = await spawn(
         '../../YosysHQ/yosys/yosys', [
-          `-q`, `-p`, `read_verilog -sv ${VFILE1}
+          `-q`, `-p`, `read_verilog ${VFILE1}
           rename ${DUT} top1
           proc
           memory
           flatten top1
           hierarchy -top top1
           async2sync
-          read_verilog -sv ${VFILE2}
+          read_verilog ${VFILE2}
           rename ${DUT} top2
           proc
           memory
@@ -195,14 +195,14 @@ const main = async () => {
     try {
       const yosys = await spawn(
         '../../YosysHQ/yosys/yosys', [
-          `-q`, `-p`, `read_verilog -sv ${VFILE1}
+          `-q`, `-p`, `read_verilog ${VFILE1}
           rename ${DUT} top1
           proc
           memory
           flatten top1
           hierarchy -top top1
           async2sync
-          read_verilog -sv ${VFILE2}
+          read_verilog ${VFILE2}
           rename ${DUT} top2
           proc
           memory
