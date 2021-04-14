@@ -38,8 +38,8 @@ th, td { padding: 0 6; }
 <th>lint</th>
 <th>mlir</th>
 <th>lint</th>
-<th>yosys</th>
-<th>undef</th>
+<th>lec1</th>
+<th>lec2</th>
 <!-- <th>sat</th> -->
 <!-- <th>max</th> -->
 </tr>`
@@ -117,6 +117,7 @@ const main = async () => {
         'top_mod.fir',
         '--lower-to-rtl',
         '--enable-lower-types',
+        '--circt-lowering-options=noAlwaysFF',
         '--verilog',
         '-o=' + VFILE2
       ].join(' '));
@@ -145,6 +146,7 @@ const main = async () => {
           memory
           flatten top1
           hierarchy -top top1
+          async2sync
           read_verilog -sv ${VFILE2}
           rename ${DUT} top2
           proc
@@ -152,9 +154,10 @@ const main = async () => {
           flatten top2
           equiv_make top1 top2 equiv
           hierarchy -top equiv
+          async2sync
           clean -purge
           equiv_simple -undef -short
-          equiv_induct -seq 50
+          equiv_induct -undef -seq 50
           equiv_status -assert
         `]
       );
@@ -207,7 +210,6 @@ const main = async () => {
           equiv_make top1 top2 equiv
           hierarchy -top equiv
           async2sync
-          clean -purge
           equiv_simple -undef -short
           equiv_induct -undef -seq 50
           equiv_status -assert
