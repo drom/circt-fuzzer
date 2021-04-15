@@ -67,6 +67,7 @@ const main = async () => {
       O: 50,
       I: 10,
       bundles: true,
+      vectors: true,
       instances: false,
       mems: false,
       ordered: false,
