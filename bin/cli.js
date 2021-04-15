@@ -83,6 +83,10 @@ yargs
     type: 'boolean',
     default: true
   })
+  .option('vectors', {
+    type: 'boolean',
+    default: true
+  })
   .options('instances', {
     type: 'boolean',
     default: true
