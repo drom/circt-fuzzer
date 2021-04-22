@@ -64,13 +64,13 @@ const main = async () => {
 
     const opt = {
       seed,
-      O: 50,
-      I: 10,
+      O: 100,
+      I: 20,
       bundles: true,
       vectors: true,
       instances: false,
       mems: false,
-      ordered: false,
+      ordered: true,
       fsms: true,
       z: true,
       m: 20,
@@ -170,7 +170,7 @@ const main = async () => {
       const tot = setTimeout(() => {
         console.log('timeout ' + seed);
         yosys.kill(9);
-      }, 10000);
+      }, 60000);
       for await (const err of yosys.stderr) {
         console.log(err.toString());
       }
