@@ -39,8 +39,14 @@ const main = async () => {
   for (let seed = 1; seed < 10000; seed++) {
     const opt = {
       seed,
-      O: 5000,
-      I: 50,
+      O: 30000,
+      I: 100,
+      bundles: true,
+      vectors: true,
+      instances: false,
+      mems: false,
+      ordered: true,
+      fsms: true,
       z: true,
       m: 20,
       L: true,
@@ -57,11 +63,16 @@ const main = async () => {
     } else {
       console.log(res);
     }
+    console.log(seed);
 
     try {
       const { stdout, stderr } = await execP(`../../llvm/circt/build/bin/firtool \
         ${DUT + seed}.fir \
         --lower-to-rtl \
+        --lower-types \
+        --expand-whens \
+        --lowering-options=noAlwaysFF \
+        --pass-timing \
         --verilog -o=${VFILE2}
       `);
       unlink(DUT + seed + '.fir', err => { if (err) { console.error(err); } });
