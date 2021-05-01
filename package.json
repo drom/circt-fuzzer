@@ -7,7 +7,8 @@
     "circt-fuzzer": "bin/cli.js"
   },
   "scripts": {
-    "test": "eslint lib *.js & mocha test",
+    "test": "eslint lib *.js && nyc -r=text -r=lcov mocha test",
+    "mocha": "mocha test",
     "build": "browserify ./lib/app.js > ./test/app.js",
     "watch": "watchify ./lib/app.js -o ./test/app.js -v"
   },
@@ -28,12 +29,12 @@
   "homepage": "https://github.com/drom/circt-fuzzer#readme",
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
-    "browserify": "^16.5.2",
-    "chai": "^4.2.0",
-    "eslint": "^7.15.0",
-    "mocha": "^8.2.1",
+    "browserify": "^17.0.0",
+    "chai": "^4.3.4",
+    "eslint": "^7.24.0",
+    "mocha": "^8.3.2",
     "nyc": "^15.1.0",
-    "watchify": "^3.11.1"
+    "watchify": "^4.0.0"
   },
   "dependencies": {
     "lodash.range": "^3.2.0",

@@ -4,6 +4,17 @@ VFILE1=a_top_mod_old.v
 VFILE2=a_top_mod_new.v
 DUT=top_mod
 
+echo "firtool"
+valgrind -q \
+../../llvm/circt/build/bin/firtool \
+a_top_mod.fir \
+--lower-to-rtl \
+--lower-types \
+--expand-whens \
+--lowering-options=noAlwaysFF \
+--pass-timing \
+--verilog -o=$VFILE2
+
 echo "firrtl"
 ./firrtl-1.5-SNAPSHOT \
   --dont-fold div \
@@ -17,14 +28,6 @@ verilator \
   --lint-only \
   $VFILE1
 
-# valgrind -q
-echo "firtool"
-../../llvm/circt/build/bin/firtool \
-  a_top_mod.fir \
-  --lower-to-rtl \
-  --lower-types \
-  --lowering-options=noAlwaysFF \
-  --verilog -o=$VFILE2
 
 echo "firtool lint"
 verilator \

@@ -118,6 +118,7 @@ const main = async () => {
         'top_mod.fir',
         '--lower-to-rtl',
         '--lower-types',
+        '--expand-whens',
         '--lowering-options=noAlwaysFF',
         '--verilog',
         '-o=' + VFILE2

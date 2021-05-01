@@ -14,18 +14,28 @@ npm i circt-fuzzer
 ```js
 circt-fuzzer --help
 ```
-```bash
-circt-fuzzer <command>
 
+```bash
 Commands:
-  circt-fuzzer fir  generate FIRRTL circuit                          [aliases: firrtl]
+  cli.js fir  generate FIRRTL circuit                          [aliases: firrtl]
 
 Options:
-  --version         Show version number                                [boolean]
-  --verbose, -v                                         [count] [default: false]
-  --seed, -s                                                            [number]
-  --max-ops, -O                                          [number] [default: 100]
-  --max-inputs, -I                                       [number] [default: 100]
-  --help            Show help                                          [boolean]
-
+      --version     Show version number                                [boolean]
+  -v, --verbose                                         [count] [default: false]
+  -s, --seed                                                            [number]
+  -O, --max-ops                                          [number] [default: 100]
+  -I, --max-inputs                                       [number] [default: 100]
+  -z, --zero-width                                     [boolean] [default: true]
+  -m, --max-width                                        [number] [default: 250]
+  -L, --literals                                       [boolean] [default: true]
+  -o, --output                                                          [string]
+  -n, --node-count                                    [boolean] [default: false]
+      --verif                                          [boolean] [default: true]
+      --fsms                                           [boolean] [default: true]
+      --bundles                                        [boolean] [default: true]
+      --vectors                                        [boolean] [default: true]
+      --instances                                      [boolean] [default: true]
+      --mems                                           [boolean] [default: true]
+      --ordered                                       [boolean] [default: false]
+      --help        Show help                                          [boolean]
 ```
