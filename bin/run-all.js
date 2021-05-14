@@ -71,11 +71,13 @@ const main = async () => {
       instances: false,
       mems: false,
       ordered: true,
-      fsms: true,
+      verif: false,
+      fsms: false,
       z: true,
-      m: 20,
+      m: 70,
       L: true,
       o: 'top_mod.fir',
+      unsized: false,
       n: true
     };
 
@@ -119,6 +121,7 @@ const main = async () => {
         '--lower-to-rtl',
         '--lower-types',
         '--expand-whens',
+        '--infer-widths',
         '--lowering-options=noAlwaysFF',
         '--verilog',
         '-o=' + VFILE2

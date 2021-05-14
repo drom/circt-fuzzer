@@ -43,7 +43,7 @@ yargs
   .option('instances',    {type: 'boolean',             default: true,  desc: 'instances'})
   .option('mems',         {type: 'boolean',             default: true,  desc: 'memories'})
   .option('ordered',      {type: 'boolean',             default: true,  desc: 'expressions in SSA order'})
-  .option('unsized-lit',  {type: 'boolean',             default: true,  desc: 'some unsized nodes'})
+  .option('unsized',      {type: 'boolean',             default: false, desc: 'some unsized nodes'})
   .command({
     command: 'fir',
     aliases: ['firrtl'],
