@@ -77,7 +77,7 @@ const main = async () => {
       m: 70,
       L: true,
       o: 'top_mod.fir',
-      unsized: false,
+      // unsized: true,
       n: true
     };
 
@@ -118,11 +118,11 @@ const main = async () => {
       const { stdout, stderr } = await execP([
         NFC,
         'top_mod.fir',
-        '--lower-to-rtl',
-        '--lower-types',
+        '--lower-to-hw',
         '--expand-whens',
         '--infer-widths',
         '--lowering-options=noAlwaysFF',
+        // '--mlir-timing',
         '--verilog',
         '-o=' + VFILE2
       ].join(' '));

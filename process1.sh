@@ -8,12 +8,12 @@ echo "firtool"
 valgrind -q \
 ../../llvm/circt/build/bin/firtool \
 a_top_mod.fir \
---lower-to-rtl \
---lower-types \
---expand-whens \
---lowering-options=noAlwaysFF \
---pass-timing \
---verilog -o=$VFILE2
+  --lower-to-hw \
+  --expand-whens \
+  --infer-widths \
+  --lowering-options=noAlwaysFF \
+  --mlir-timing \
+  --verilog -o=$VFILE2
 
 echo "firrtl"
 ./firrtl-1.5-SNAPSHOT \
