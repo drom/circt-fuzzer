@@ -9,11 +9,12 @@ valgrind -q \
 ../../llvm/circt/build/bin/firtool \
 a_top_mod.fir \
   --lower-to-hw \
-  --expand-whens \
-  --infer-widths \
+  --imconstprop \
   --lowering-options=noAlwaysFF \
   --mlir-timing \
   --verilog -o=$VFILE2
+# --infer-widths \
+# --expand-whens \
 
 echo "firrtl"
 ./firrtl-1.5-SNAPSHOT \
