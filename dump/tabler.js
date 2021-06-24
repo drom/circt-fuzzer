@@ -76,7 +76,7 @@ const othr = root => {
 
   if ([
     {h: '$dff',   c: 'timeout', m: 'dff\\) to SAT database.'},
-    {h: 'Dump',  c: 'timeout', m: /Stack dump:/},
+    {h: 'Dump',  c: 'timeout', m: /crash backtrace/},
     {h: 'Crash',  c: 'timeout', m: /Exception in thread "main"/},
     {h: 'tOut',   c: 'timeout', m: /timeout/},
     {h: 'syntax', c: 'error',   m: /ERROR: syntax error/},

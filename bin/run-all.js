@@ -9,12 +9,15 @@ const rnd = require('random-js');
 
 const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
+const dontTouch = require('../lib/dont-touch.js');
+
 
 const execP = promisify(exec);
 const writeFileP = promisify(writeFile);
 
 const VFILE1 = 'top_mod.sv';
 const VFILE2 = 'top_mod_m.sv';
+const AFILE2 = 'top_mod_m.json';
 const DUT = 'top_mod';
 const SFC = './firrtl-1.5-SNAPSHOT'; // './firrtl-1.4.0';
 const NFC = '../../llvm/circt/build/bin/firtool';
@@ -73,17 +76,24 @@ const main = async () => {
       ordered: true,
       verif: false,
       fsms: true,
+      donttouch: AFILE2,
       z: true,
       m: 70,
       L: true,
       o: 'top_mod.fir',
-      // unsized: true,
+      unsized: true,
       n: true
     };
 
     const mt = rnd.MersenneTwister19937.seed(opt.seed);
 
     const circuit = genCircuit(mt, opt);
+
+    if (opt.donttouch) {
+      const anno = dontTouch(circuit, opt, mt);
+      await writeFileP(opt.donttouch, anno);
+    }
+
     const res = firOutput(circuit, opt);
 
     if (opt.o) {
@@ -120,9 +130,10 @@ const main = async () => {
         'top_mod.fir',
         '--lower-to-hw',
         // '--expand-whens',
-        // '--infer-widths',
+        '--infer-widths',
         '--imconstprop',
-        '--lowering-options=noAlwaysFF',
+        // '--lowering-options=noAlwaysFF',
+        '--annotation-file=' + AFILE2,
         // '--mlir-timing',
         '--verilog',
         '-o=' + VFILE2

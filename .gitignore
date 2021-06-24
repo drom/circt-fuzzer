@@ -6,3 +6,9 @@ package-lock.json
 *.v
 dump*.html
 src/
+dialects
+syn
+ref
+firrtl*
+top_mod*
+vgcore*

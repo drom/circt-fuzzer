@@ -9,6 +9,7 @@ const rnd = require('random-js');
 
 const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
+const dontTouch = require('../lib/dont-touch.js');
 
 const writeFileP = promisify(writeFile);
 
@@ -17,6 +18,12 @@ const handler = async opt => {
   const mt = rnd.MersenneTwister19937.seed(opt.seed);
 
   const circuit = genCircuit(mt, opt);
+
+  if (opt.donttouch) {
+    const anno = dontTouch(circuit, opt, mt);
+    await writeFileP(opt.donttouch, anno);
+  }
+
   const res = firOutput(circuit, opt);
 
   if (opt.o) {
@@ -44,6 +51,7 @@ yargs
   .option('mems',         {type: 'boolean',             default: true,  desc: 'memories'})
   .option('ordered',      {type: 'boolean',             default: true,  desc: 'expressions in SSA order'})
   .option('unsized',      {type: 'boolean',             default: false, desc: 'some unsized nodes'})
+  .option('donttouch',    {type: 'string',                              desc: 'donttouch file name'})
   .command({
     command: 'fir',
     aliases: ['firrtl'],

@@ -2,6 +2,7 @@
 
 VFILE1=a_top_mod_old.v
 VFILE2=a_top_mod_new.v
+VFILE3=a_top_mod_new_all.v
 DUT=top_mod
 
 echo "firtool"
@@ -10,11 +11,25 @@ valgrind -q \
 a_top_mod.fir \
   --lower-to-hw \
   --imconstprop \
-  --lowering-options=noAlwaysFF \
+  --infer-widths \
+  --annotation-file=a_${DUT}.json \
   --mlir-timing \
   --verilog -o=$VFILE2
-# --infer-widths \
+  # --lowering-options=noAlwaysFF \
 # --expand-whens \
+
+echo "firtool"
+valgrind -q \
+../../llvm/circt/build/bin/firtool \
+a_top_mod.fir \
+  --lower-to-hw \
+  --imconstprop \
+  --infer-widths \
+  --mlir-timing \
+  --verilog -o=$VFILE3
+  # --lowering-options=noAlwaysFF \
+# --expand-whens \
+
 
 echo "firrtl"
 ./firrtl-1.5-SNAPSHOT \
@@ -37,7 +52,7 @@ verilator \
   $VFILE2
 
 echo "yosys 0"
-../../YosysHQ/yosys/yosys -q -p "
+../../YosysHQ/yosys/yosys -q -l yosys.log -p "
   read_verilog $VFILE1
   rename $DUT top1
   proc
