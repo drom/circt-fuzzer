@@ -132,6 +132,7 @@ const main = async () => {
         // '--expand-whens',
         '--infer-widths',
         '--imconstprop',
+        '--lower-types-v2=1',
         // '--lowering-options=noAlwaysFF',
         '--annotation-file=' + AFILE2,
         // '--mlir-timing',
