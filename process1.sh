@@ -1,67 +1,96 @@
 #!/bin/bash
 
-VFILE1=a_top_mod_old.v
-VFILE2=a_top_mod_new.v
-VFILE3=a_top_mod_new_all.v
-DUT=top_mod
+set -e
 
-echo "firtool"
-valgrind -q \
-../../llvm/circt/build/bin/firtool \
-a_top_mod.fir \
-  --lower-to-hw \
-  --imconstprop \
-  --infer-widths \
-  --annotation-file=a_${DUT}.json \
-  --mlir-timing \
-  --verilog -o=$VFILE2
-  # --lowering-options=noAlwaysFF \
-# --expand-whens \
+FIRRTL=./firrtl-1.5-SNAPSHOT
+FIRTOOL=../../llvm/circt/build/bin/firtool
+YOSYS=../../YosysHQ/yosys/yosys
 
-echo "firtool"
-valgrind -q \
-../../llvm/circt/build/bin/firtool \
-a_top_mod.fir \
-  --lower-to-hw \
-  --imconstprop \
-  --infer-widths \
-  --mlir-timing \
-  --verilog -o=$VFILE3
-  # --lowering-options=noAlwaysFF \
-# --expand-whens \
+INPUT=a_top_mod.fir
+TOP=top_mod
 
+# command line arguments
+while [[ $# -gt 1 ]]
+do
+key="$1"
+
+case $key in
+  -i|--input)
+  INPUT="$2"
+  shift
+  ;;
+  -t|--top)
+  TOP="$2"
+  shift
+  ;;
+  *)
+  ;;
+esac
+shift
+done
+
+VFILE1=${INPUT}.sfc.v
+VFILE2=${INPUT}.mfc.v
+VFILE3=${INPUT}.mfc2.v
 
 echo "firrtl"
-./firrtl-1.5-SNAPSHOT \
+$FIRRTL \
   --dont-fold div \
-  -i a_top_mod.fir \
+  --annotation-file ${INPUT}.json \
+  -i $INPUT \
   -X verilog \
   -o $VFILE1
 
+echo "firtool"
+valgrind -q \
+$FIRTOOL \
+$INPUT \
+  --lower-to-hw \
+  --infer-widths \
+  --imconstprop \
+  --annotation-file=${INPUT}.json \
+  --mlir-timing \
+  --verilog \
+  -o=$VFILE2
+  # --lowering-options=noAlwaysFF \
+# --expand-whens \
+
+echo "firtool"
+valgrind -q \
+$FIRTOOL \
+$INPUT \
+  --lower-to-hw \
+  --infer-widths \
+  --mlir-timing \
+  --verilog -o=$VFILE3
+  # --imconstprop=0 \
+  # --lowering-options=noAlwaysFF \
+# --expand-whens \
+
+
 echo "firrtl lint"
 verilator \
-  --top-module top_mod \
+  --top-module $TOP \
   --lint-only \
   $VFILE1
 
-
 echo "firtool lint"
 verilator \
-  --top-module top_mod \
+  --top-module $TOP \
   --lint-only \
   $VFILE2
 
 echo "yosys 0"
-../../YosysHQ/yosys/yosys -q -l yosys.log -p "
-  read_verilog $VFILE1
-  rename $DUT top1
+$YOSYS -q -l yosys.log -p "
+  read_verilog -sv  $VFILE1
+  rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog $VFILE2
-  rename $DUT top2
+  read_verilog -sv  $VFILE2
+  rename $TOP top2
   proc
   memory
   flatten top2
@@ -75,16 +104,16 @@ echo "yosys 0"
 "
 
 echo "yosys 1"
-../../YosysHQ/yosys/yosys -q -p "
-  read_verilog $VFILE1
-  rename $DUT top1
+$YOSYS -q -p "
+  read_verilog -sv $VFILE1
+  rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog $VFILE2
-  rename $DUT top2
+  read_verilog -sv  $VFILE2
+  rename $TOP top2
   proc
   memory
   flatten top2
@@ -98,16 +127,16 @@ echo "yosys 1"
 "
 
 echo "yosys 2"
-../../YosysHQ/yosys/yosys -q -p "
-  read_verilog $VFILE1
-  rename $DUT top1
+$YOSYS -q -p "
+  read_verilog -sv  $VFILE1
+  rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog $VFILE2
-  rename $DUT top2
+  read_verilog -sv  $VFILE2
+  rename $TOP top2
   proc
   memory
   flatten top2
@@ -121,16 +150,16 @@ echo "yosys 2"
 "
 
 echo "yosys 3"
-../../YosysHQ/yosys/yosys -q -p "
-  read_verilog $VFILE1
-  rename $DUT top1
+$YOSYS -q -p "
+  read_verilog -sv  $VFILE1
+  rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog $VFILE2
-  rename $DUT top2
+  read_verilog -sv  $VFILE2
+  rename $TOP top2
   proc
   memory
   flatten top2
@@ -140,16 +169,16 @@ echo "yosys 3"
 "
 
 echo "yosys 4"
-../../YosysHQ/yosys/yosys -q -p "
-  read_verilog $VFILE1
-  rename $DUT top1
+$YOSYS -q -p "
+  read_verilog -sv  $VFILE1
+  rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog $VFILE2
-  rename $DUT top2
+  read_verilog -sv  $VFILE2
+  rename $TOP top2
   proc
   memory
   flatten top2
