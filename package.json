@@ -37,7 +37,7 @@
     "watchify": "^4.0.0"
   },
   "dependencies": {
-    "irtl": "^0.0.2",
+    "irtl": "^0.2.0",
     "lodash.range": "^3.2.0",
     "logidrom": "^0.3.1",
     "onml": "^2.1.0",

@@ -5,8 +5,10 @@ const { writeFile } = require('fs');
 const { promisify } = require('util');
 const { exec, spawn } = require('child_process');
 
+const yargs = require('yargs');
 const rnd = require('random-js');
 
+const genHierCircuit = require('../lib/fir-gen-hier-circuit.js');
 const genCircuit = require('../lib/fir-gen-circuit.js');
 const firOutput = require('../lib/fir-output.js');
 const dontTouch = require('../lib/dont-touch.js');
@@ -48,7 +50,7 @@ th, td { padding: 0 6; }
 </tr>`
 );
 
-const main = async () => {
+const main = mode => async () => {
   for (let seed = 1; seed < 10000; seed++) {
 
     console.log('<tr>');
@@ -67,7 +69,7 @@ const main = async () => {
 
     const opt = {
       seed,
-      O: 100,
+      O: 50,
       I: 20,
       bundles: true,
       vectors: true,
@@ -82,19 +84,27 @@ const main = async () => {
       L: true,
       o: 'top_mod.fir',
       unsized: true,
-      n: true
+      n: true,
+
+      // hier options
+      numMods: 5
     };
 
     const mt = rnd.MersenneTwister19937.seed(opt.seed);
 
-    const circuit = genCircuit(mt, opt);
+    let res;
+    if (mode === 'fir') {
+      const circuit = genCircuit(mt, opt);
 
-    if (opt.donttouch) {
-      const anno = dontTouch(circuit, opt, mt);
-      await writeFileP(opt.donttouch, anno);
+      if (opt.donttouch) {
+        const anno = dontTouch(circuit, opt, mt);
+        await writeFileP(opt.donttouch, anno);
+      }
+
+      res = firOutput(circuit, opt);
+    } else {
+      res = genHierCircuit(opt, mt);
     }
-
-    const res = firOutput(circuit, opt);
 
     if (opt.o) {
       await writeFileP(opt.o, res);
@@ -133,7 +143,7 @@ const main = async () => {
         '--infer-widths',
         '--imconstprop',
         // '--lowering-options=noAlwaysFF',
-        '--annotation-file=' + AFILE2,
+        // '--annotation-file=' + AFILE2,
         // '--mlir-timing',
         '--verilog',
         '-o=' + VFILE2
@@ -368,6 +378,20 @@ const main = async () => {
   }
 };
 
-main();
+yargs
+  .command({
+    command: 'fir',
+    aliases: ['firrtl'],
+    desc: 'generate FIRRTL circuit',
+    handler: main('fir')
+  })
+  .command({
+    command: 'hier',
+    aliases: ['hierFirrtl'],
+    desc: 'generate hierarchical FIRRTL circuit',
+    handler: main('hier')
+  })
+  .demandCommand()
+  .help().argv;
 
 /* eslint complexity:0 */
