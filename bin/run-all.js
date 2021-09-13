@@ -50,8 +50,17 @@ th, td { padding: 0 6; }
 </tr>`
 );
 
-const main = mode => async () => {
-  for (let seed = 1; seed < 10000; seed++) {
+function* caser (start, len) {
+  yield 4352;
+  yield 7564;
+  yield 15662;
+  for (let seed = start; seed < (start + len); seed++) {
+    yield seed;
+  }
+}
+
+const main = mode => async opt => {
+  for (let seed of caser(opt.start, opt.length)) {
 
     console.log('<tr>');
 
@@ -74,7 +83,7 @@ const main = mode => async () => {
       bundles: true,
       vectors: true,
       instances: true,
-      mems: false,
+      mems: true,
       ordered: true,
       verif: false,
       fsms: true,
@@ -145,6 +154,12 @@ const main = mode => async () => {
         // '--lowering-options=noAlwaysFF',
         // '--annotation-file=' + AFILE2,
         // '--mlir-timing',
+        '--lowering-options=' + [
+          'noAlwaysComb',
+          'disallowPackedArrays',
+          'disallowLocalVariables',
+          'emittedLineLength=8192'
+        ],
         '--verilog',
         '-o=' + VFILE2
       ].join(' '));
@@ -379,6 +394,8 @@ const main = mode => async () => {
 };
 
 yargs
+  .option('start',  {type: 'number', alias: 's', default: 1, desc: 'starting seed'})
+  .option('length', {type: 'number', alias: 'l', default: 10000, desc: 'number of cases'})
   .command({
     command: 'fir',
     aliases: ['firrtl'],
