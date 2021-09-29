@@ -51,9 +51,6 @@ th, td { padding: 0 6; }
 );
 
 function* caser (start, len) {
-  yield 4352;
-  yield 7564;
-  yield 15662;
   for (let seed = start; seed < (start + len); seed++) {
     yield seed;
   }
@@ -94,7 +91,7 @@ const main = mode => async opt => {
       o: 'top_mod.fir',
       unsized: true,
       n: true,
-
+      numClocks: 2,
       // hier options
       numMods: 5
     };

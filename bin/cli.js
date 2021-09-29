@@ -68,7 +68,9 @@ yargs
   .option('ordered',      {type: 'boolean',             default: true,  desc: 'expressions in SSA order'})
   .option('unsized',      {type: 'boolean',             default: false, desc: 'some unsized nodes'})
   .option('donttouch',    {type: 'string',                              desc: 'donttouch file name'})
-  .option('numMods',      {type: 'number',              default: 8,     desc: 'number of modules'})
+  .option('numMods',      {type: 'number',              default: 5,     desc: 'number of modules'})
+  .option('numClocks',    {type: 'number',  alias: 'c', default: 2,     desc: 'number of clocks'})
+  .option('unusedMods',   {type: 'boolean',             default: false, desc: 'allow unused modules'})
   .command({
     command: 'fir',
     aliases: ['firrtl'],

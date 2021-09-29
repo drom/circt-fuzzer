@@ -36,30 +36,39 @@ VFILE3=${INPUT}.mfc2.v
 echo "firrtl"
 $FIRRTL \
   --dont-fold div \
-  --annotation-file ${INPUT}.json \
   -i $INPUT \
   -X verilog \
   -o $VFILE1
 
+# --annotation-file ${INPUT}.json \
+# valgrind -q \
+# --lowering-options=disallowPackedArrays,emittedLineLength=8192
+# --lower-to-hw
+# --infer-widths
+# --imconstprop
 echo "firtool"
-valgrind -q \
 $FIRTOOL \
 $INPUT \
-  --lower-to-hw \
-  --infer-widths \
-  --imconstprop \
-  --annotation-file=${INPUT}.json \
-  --mlir-timing \
   --verilog \
+  --lowering-options=disallowPackedArrays\
+,noAlwaysComb\
+,disallowLocalVariables\
+,emittedLineLength=8192 \
   -o=$VFILE2
-  # --lowering-options=noAlwaysFF \
-# --expand-whens \
+#  --mlir-timing
+# --lowering-options=noAlwaysFF
+# --annotation-file=${INPUT}.json
+# --expand-whens
 
+# valgrind -q \
 echo "firtool"
-valgrind -q \
 $FIRTOOL \
 $INPUT \
   --lower-to-hw \
+  --lowering-options=disallowPackedArrays\
+,noAlwaysComb\
+,disallowLocalVariables\
+,emittedLineLength=8192 \
   --infer-widths \
   --mlir-timing \
   --verilog -o=$VFILE3
@@ -71,25 +80,29 @@ $INPUT \
 echo "firrtl lint"
 verilator \
   --top-module $TOP \
+  --Wno-WIDTH \
+  --Wno-MULTIDRIVEN \
   --lint-only \
   $VFILE1
 
 echo "firtool lint"
 verilator \
   --top-module $TOP \
+  --Wno-LATCH \
+  --Wno-MULTIDRIVEN \
   --lint-only \
   $VFILE2
 
 echo "yosys 0"
 $YOSYS -q -l yosys.log -p "
-  read_verilog -sv  $VFILE1
+  read_verilog $VFILE1
   rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog -sv  $VFILE2
+  read_verilog $VFILE2
   rename $TOP top2
   proc
   memory
@@ -105,14 +118,14 @@ $YOSYS -q -l yosys.log -p "
 
 echo "yosys 1"
 $YOSYS -q -p "
-  read_verilog -sv $VFILE1
+  read_verilog $VFILE1
   rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog -sv  $VFILE2
+  read_verilog $VFILE2
   rename $TOP top2
   proc
   memory
@@ -128,14 +141,14 @@ $YOSYS -q -p "
 
 echo "yosys 2"
 $YOSYS -q -p "
-  read_verilog -sv  $VFILE1
+  read_verilog $VFILE1
   rename $TOP top1
   proc
   memory
   flatten top1
   hierarchy -top top1
   async2sync
-  read_verilog -sv  $VFILE2
+  read_verilog $VFILE2
   rename $TOP top2
   proc
   memory
