@@ -47,3 +47,7 @@ Options:
       --unusedMods  allow unused modules              [boolean] [default: false]
       --help        Show help                                          [boolean]
 ```
+
+## Other
+
+https://github.com/google/fuzzing
