@@ -71,6 +71,7 @@ yargs
   .option('numMods',      {type: 'number',              default: 5,     desc: 'number of modules'})
   .option('numClocks',    {type: 'number',  alias: 'c', default: 2,     desc: 'number of clocks'})
   .option('unusedMods',   {type: 'boolean',             default: false, desc: 'allow unused modules'})
+  .option('validif',      {type: 'boolean',             default: false, desc: 'validif'})
   .command({
     command: 'fir',
     aliases: ['firrtl'],
