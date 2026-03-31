@@ -65,7 +65,7 @@ circt-fuzzer hier [options]
 
 ## Web App
 
-The project includes a web-based visualization tool located in `lib/app.js`. This app allows you to generate and visualize random FIRRTL circuits directly in your browser.
+The project includes a web-based visualization tool located in `lib/app.js`. This app generates random FIRRTL circuits and renders them as interactive digital logic diagrams using the **[logidrom](https://github.com/drom/logidrom)** engine.
 
 A live version is deployed at: **[drom.io/firrtl](https://drom.io/firrtl)**
 
