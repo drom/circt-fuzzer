@@ -5,6 +5,16 @@
 
 Generator of random FIRRTL circuits for testing [CIRCT](https://github.com/llvm/circt) and other FIRRTL-based tools.
 
+## Rationale
+
+Fuzzing is a critical component in the development and verification of hardware description language (HDL) compilers and synthesis tools. This project serves several key objectives:
+
+- **Tool Development & Stability**: Compilers like CIRCT are highly complex, with numerous optimization passes and lowering steps. Randomly generated circuits can stress-test edge cases that are often overlooked in manually written test suites, ensuring the compiler remains stable as new features are added.
+- **Automated Debugging**: By generating randomized yet valid FIRRTL, the fuzzer can automatically discover inputs that trigger compiler crashes (Internal Compiler Errors) or incorrect hardware generation. Tools like `kataba.js` in this repository further help by minimizing these "crashers" into small, actionable test cases.
+- **Maximizing Code Coverage**: Traditional tests often follow "happy paths." Fuzzing explores the state space of the compiler more exhaustively, reaching deep into corner cases of the intermediate representation (IR) and optimization logic to improve overall code coverage.
+- **Differential Testing & Independence**: One of the most powerful uses of this fuzzer is **Logical Equivalence Checking (LEC)**. By generating a circuit and passing it through two different toolchains (e.g., the Scala FIRRTL Compiler and CIRCT's `firtool`), we can compare the resulting Verilog for equivalence. An independent implementation of the generator ensures that we are not just testing the compiler against its own assumptions, but against the formal FIRRTL specification.
+- **Verification Frameworks**: High-quality hardware requires rigorous verification. This fuzzer can generate complex verification statements (`assert`, `assume`, `cover`) within random logic to ensure that formal verification tools and simulators correctly handle property checking.
+
 ## Install
 
 ```bash
