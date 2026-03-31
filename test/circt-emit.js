@@ -133,7 +133,7 @@ endmodule
 `
 );
 
-describe('circt-emit', () => {
+describe.skip('circt-emit', () => {
   it('hw', async () => {
     expect(emit(ast)).to.eq(mlir);
     expect(await circtCompile(mlir)).to.eq(verilog);

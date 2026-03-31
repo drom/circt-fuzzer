@@ -29,11 +29,11 @@
   "homepage": "https://github.com/drom/circt-fuzzer#readme",
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
-    "browserify": "^17.0.0",
-    "chai": "^4.3.7",
-    "eslint": "^8.33.0",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
+    "browserify": "17.0.1",
+    "chai": "6.2.2",
+    "eslint": "8.57.1",
+    "mocha": "11.7.5",
+    "nyc": "18.0.0",
     "onml": "^2.1.0",
     "watchify": "^4.0.0"
   },
@@ -43,7 +43,7 @@
     "logidrom": "^0.3.1",
     "random-js": "^2.1.0",
     "reqack": "^1.12.3",
-    "yargs": "^17.6.2"
+    "yargs": "18.0.0"
   },
   "eslintConfig": {
     "extends": "@drom/eslint-config/eslint4/node8",
