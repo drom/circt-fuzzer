@@ -63,6 +63,18 @@ circt-fuzzer hier [options]
 - **Verification**: Emits verification statements to test compiler handling of properties.
 - **SSA Order**: Can optionally emit expressions in SSA order or randomized order.
 
+## Web App
+
+The project includes a web-based visualization tool located in `lib/app.js`. This app allows you to generate and visualize random FIRRTL circuits directly in your browser.
+
+A live version is deployed at: **[drom.io/firrtl](https://drom.io/firrtl)**
+
+You can also build and run it locally:
+```bash
+npm run build
+# Then open test/index.html in a browser
+```
+
 ## Experimental Tools
 
 The project includes several experimental scripts in the `bin/` directory:
